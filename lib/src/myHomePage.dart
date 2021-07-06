@@ -16,7 +16,6 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
-
 class MyPage extends StatefulWidget {
   MyPage({Key key}) : super(key: key);
 
@@ -35,6 +34,7 @@ class _MyPageState extends State<MyPage> {
     super.initState();
     getPermissions();
   }
+
   getPermissions() async {
     if (await Permission.contacts.request().isGranted) {
       getAllContacts();
@@ -51,12 +51,7 @@ class _MyPageState extends State<MyPage> {
   }
 
   getAllContacts() async {
-    List colors = [
-      Colors.green,
-      Colors.indigo,
-      Colors.yellow,
-      Colors.orange
-    ];
+    List colors = [Colors.green, Colors.indigo, Colors.yellow, Colors.orange];
     int colorIndex = 0;
     List<Contact> _contacts = (await ContactsService.getContacts()).toList();
     _contacts.forEach((contact) {
@@ -118,69 +113,65 @@ class _MyPageState extends State<MyPage> {
                     labelText: 'Search',
                     border: new OutlineInputBorder(
                         borderSide: new BorderSide(
-                            color: Theme.of(context).primaryColor
-                        )
-                    ),
-                    prefixIcon: Icon(
-                        Icons.search,
-                        color: Theme.of(context).primaryColor
-                    )
-                ),
+                            color: Theme.of(context).primaryColor)),
+                    prefixIcon: Icon(Icons.search,
+                        color: Theme.of(context).primaryColor)),
               ),
             ),
-            listItemsExist == true ?
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: isSearching == true ? contactsFiltered.length : contacts.length,
-                itemBuilder: (context, index) {
-                  Contact contact = isSearching == true ? contactsFiltered[index] : contacts[index];
+            listItemsExist == true
+                ? Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: isSearching == true
+                          ? contactsFiltered.length
+                          : contacts.length,
+                      itemBuilder: (context, index) {
+                        Contact contact = isSearching == true
+                            ? contactsFiltered[index]
+                            : contacts[index];
 
-                  var baseColor = contactsColorMap[contact.displayName] as dynamic;
+                        var baseColor =
+                            contactsColorMap[contact.displayName] as dynamic;
 
-                  Color color1 = baseColor[800];
-                  Color color2 = baseColor[400];
-                  return ListTile(
-                      title: Text(contact.displayName),
-                      subtitle: Text(
-                          contact.phones.length > 0 ? contact.phones.elementAt(0).value : ''
-                      ),
-                      leading: (contact.avatar != null && contact.avatar.length > 0) ?
-                      CircleAvatar(
-                        backgroundImage: MemoryImage(contact.avatar),
-                      ) :
-                      Container(
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                  colors: [
-                                    color1,
-                                    color2,
-                                  ],
-                                  begin: Alignment.bottomLeft,
-                                  end: Alignment.topRight
-                              )
-                          ),
-                          child: CircleAvatar(
-                              child: Text(
-                                  contact.initials(),
-                                  style: TextStyle(
-                                      color: Colors.white
+                        Color color1 = baseColor[800];
+                        Color color2 = baseColor[400];
+                        return ListTile(
+                            title: Text(contact.displayName),
+                            subtitle: Text(contact.phones.length > 0
+                                ? contact.phones.elementAt(0).value
+                                : ''),
+                            leading: (contact.avatar != null &&
+                                    contact.avatar.length > 0)
+                                ? CircleAvatar(
+                                    backgroundImage:
+                                        MemoryImage(contact.avatar),
                                   )
-                              ),
-                              backgroundColor: Colors.transparent
-                          )
-                      )
-                  );
-                },
-              ),
-            ) : Container(
-              padding: EdgeInsets.all(20),
-              child: Text(
-                  isSearching ?'No search results to show' : 'No contacts exist',
-                  style: Theme.of(context).textTheme.headline6
-              ) ,
-            )
+                                : Container(
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        gradient: LinearGradient(
+                                            colors: [
+                                              color1,
+                                              color2,
+                                            ],
+                                            begin: Alignment.bottomLeft,
+                                            end: Alignment.topRight)),
+                                    child: CircleAvatar(
+                                        child: Text(contact.initials(),
+                                            style:
+                                                TextStyle(color: Colors.white)),
+                                        backgroundColor: Colors.transparent)));
+                      },
+                    ),
+                  )
+                : Container(
+                    padding: EdgeInsets.all(20),
+                    child: Text(
+                        isSearching
+                            ? 'No search results to show'
+                            : 'No contacts exist',
+                        style: Theme.of(context).textTheme.headline6),
+                  )
           ],
         ),
       ),
